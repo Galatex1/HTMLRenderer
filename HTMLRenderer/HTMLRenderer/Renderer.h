@@ -12,12 +12,12 @@
 #include "vector2.h"
 #include "Color.h"
 #include "Element.h"
+#include "SmartPointers.h"
 
 using namespace std;
 using namespace HTMLParser;
 
 #define M_PI 3.14
-
 
 class Aspect
 {
@@ -45,7 +45,11 @@ public:
 	
 	void text(cairo_t* cr, string text = "", double x = 0.0, double y = 0.0, double size = 13.0, cairo_font_slant_t slant = CAIRO_FONT_SLANT_NORMAL, cairo_font_weight_t weight = CAIRO_FONT_WEIGHT_NORMAL);
 
+	void calculate(cairo_t * cr, spElement DOM);
+
 	void renderDOM(cairo_t * cr, spElement DOM);
+
+	void doRender(cairo_t * cr, spElement DOM);
 
 
 private:

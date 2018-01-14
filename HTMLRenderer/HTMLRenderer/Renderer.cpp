@@ -1,4 +1,5 @@
 #include "Renderer.h"
+#include "Debug.h"
 #include <ctime>
 
 double Aspect::CIRCLE = 0.5;
@@ -17,6 +18,7 @@ Color::~Color()
 
 Renderer::Renderer()
 {
+	srand((unsigned)time(NULL));
 }
 
 Renderer::~Renderer()
@@ -53,9 +55,45 @@ void Renderer::text(cairo_t* cr, string text, double x, double y, double size, c
 	cairo_text_extents_t extents;
 	cairo_text_extents(cr, text.c_str(), &extents);
 
-	cairo_move_to(cr, x, y + extents.height);
+	cairo_move_to(cr, x, y + extents.y_advance);
+
 	cairo_show_text(cr, text.c_str());
 	//cairo_fill(cr);
+}
+
+void Renderer::calculate(cairo_t * cr, spElement _el)
+{
+	int i = 0;
+
+	//Debug::console << _el->height << ": ";
+	//Debug::console << _el->width << endl;
+
+	for each (spElement el in _el->children)
+	{
+		el->position = Vector2(0.0, 0.0);
+		el->width = 0.0;
+		el->height = 0.0;
+
+		if (el->type == "text")
+		{
+			text(cr);
+			cairo_text_extents_t extents;
+			cairo_text_extents(cr, el->text.c_str(), &extents);
+			el->width = extents.width;
+			el->height = extents.height;
+		}
+
+		el->allPreChildRender();
+
+		if (size_t n = std::distance(el->children.begin(), el->children.end()) > 0)
+			calculate(cr, el);
+
+		el->allPostChildRender();
+
+		el->allProperties();
+
+		i++;
+	}
 }
 
 void Renderer::renderDOM(cairo_t * cr, spElement _el)
@@ -64,93 +102,38 @@ void Renderer::renderDOM(cairo_t * cr, spElement _el)
 
 	for each (spElement el in _el->children)
 	{
-		el->position = Vector2(0.0, 0.0);
-		el->width = 0.0;
-		el->height = 0.0;
-		Vector2 position;
-		if (i > 0)
+		//el->allProperties();
+
+		Debug::console << "rendering " << el->type << ", position: (" << el->position.x << ", " << el->position.y << "), width: " << el->width << ", height: " << el->height << endl;
+
+		if (el->type != "text")
 		{
-			if ( el->pDisplay->isInline())
-			{
-				position = _el->children[i - 1]->position + Vector2(_el->children[i - 1]->width, 0) + Vector2(el->pMargin->x(), el->pMargin->y());
-				
-				if (position.x + el->width > _el->width)
-					position = Vector2(0, el->DOMparent->children[i - 1]->position.y) + Vector2(0, el->DOMparent->children[i - 1]->height) + Vector2(el->pMargin->x(), el->pMargin->y());
-
-			}
-			else
-				position = _el->children[i - 1]->position + Vector2(0, _el->children[i - 1]->height) + Vector2(el->pMargin->x(), el->pMargin->y());
-
-		}
-		else
-		{
-					position = Vector2(el->pMargin->pLeft->value, el->pMargin->pTop->value) + Vector2(el->DOMparent->pPadding->pLeft->value, el->DOMparent->pPadding->pTop->value);
-		}
-
-
-		el->position = position;
-
-		if (size_t n = std::distance(el->children.begin(), el->children.end()) > 0)
-			renderDOM(cr, el);
-
-
-		srand(time(NULL));
-
-		if (el->text != "")
-		{
-			cairo_text_extents_t extents;
-			text(cr, el->text, el->position.x, el->position.y);
-			cairo_text_extents(cr, el->text.c_str(), &extents);
-
-			el->width += extents.width;
-			el->height += extents.height;
-		} 
-
-
-		if (!el->pDisplay->isInline())
-		{
-			_el->height += el->height;
-
-		}
-		else
-		{
-
-			if (position.x + el->width > _el->width)
-			{
-				_el->height += el->height;
-			}
-			else
-			{
-				_el->width = el->width;
-			}
-
-		}
-
-		if(el->type != Html::TEXT)
-			roundedRectangle(cr, 
-							el->position.x, 
-							el->position.y, 
-							el->width,
-							el->height,
-							Color(rand() % 255, rand()%255, rand() % 255, 0.5),
-							0.0,
-							1.0
-							);
-		else
 			roundedRectangle(cr,
 				el->position.x,
 				el->position.y,
 				el->width,
 				el->height,
-				Color(rand() % 255, rand() % 255, rand() % 255, 0.0),
+				Color(255,125,0, 0.1),
 				0.0,
 				0.0
 			);
+		}
+		else
+		{
+			text(cr, el->text, el->position.x, el->position.y);
+		}
 
-
+		if (size_t n = std::distance(el->children.begin(), el->children.end()) > 0)
+			renderDOM(cr, el);
 
 		i++;
 	}
+}
+
+void Renderer::doRender(cairo_t * cr, spElement DOM)
+{
+	calculate(cr, DOM);
+	renderDOM(cr, DOM);
 }
 
 

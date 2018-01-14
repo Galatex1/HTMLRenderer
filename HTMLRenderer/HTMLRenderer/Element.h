@@ -9,9 +9,10 @@
 #include <memory>  
 
 #include "Color.h"
-#include "Property.h"
+#include "Display.h"
 #include "vector2.h"
 #include "ref_counter.h"
+#include "SmartPointers.h"
 
 using namespace std;
 using namespace HTMLParser;
@@ -28,37 +29,37 @@ enum class  Html {
 	DIV,
 	H1,
 	H2,
-	H3 ,
-	H4 ,
-	H5 ,
-	H6 ,
-	HR ,
-	I ,
-	IMG ,
-	RADIO ,
-	CHECKBOX ,
-	LI ,
-	OL ,
-	OPTION ,
-	P ,
-	S ,
-	SELECT ,
-	SPAN ,
-	SUB ,
-	SUP ,
-	TABLE ,
-	TD ,
-	TH ,
-	TR ,
-	U ,
-	UL ,
-	RADIOS ,
-	CHECKBOXES ,
-	INPUT ,
+	H3,
+	H4,
+	H5,
+	H6,
+	HR,
+	I,
+	IMG,
+	RADIO,
+	CHECKBOX,
+	LI,
+	OL,
+	OPTION,
+	P,
+	S,
+	SELECT,
+	SPAN,
+	SUB,
+	SUP,
+	TABLE,
+	TD,
+	TH,
+	TR,
+	U,
+	UL,
+	RADIOS,
+	CHECKBOXES,
+	INPUT,
 	TEXT 
 };
 
-DECLARE_SMART(ValueType, spValueType);
+
 class ValueType : public ref_counter
 {
 public:
@@ -72,7 +73,7 @@ public:
 };
 
 
-DECLARE_SMART(Side4, spSide4);
+
 class Side4 : public ref_counter
 {
 
@@ -96,7 +97,7 @@ public:
 	spValueType pBottom;
 };
 
-DECLARE_SMART(Element, spElement);
+
 
 class Element : public ref_counter
 {
@@ -104,17 +105,39 @@ public:
 	//Default Constructor
 	Element();
 	Element(spElement _parent);
+	void Init();
 
 	bool isInline() { return pDisplay->isInline(); };
 	void addChild(spElement e) { children.push_back(e); e->DOMparent = this;};
 	spElement getLastChild() { return children.back(); };
+	void allProperties() {
+		for each (spProperty prop in props)
+		{
+			prop->setProperty();
+		}
+	};
+	void allPostChildRender() {
+		for each (spProperty prop in props)
+		{
+			prop->postChildRender();
+		}
+	};
+	void allPreChildRender() {
+		for each (spProperty prop in props)
+		{
+			prop->preChildRender();
+		}
+	};
+
+
+	int getIndex();
 
 
 
 	//Deconstructor
 	~Element();
 	
-	Html type;
+	string type;
 	spElement DOMparent;
 	vector<spElement> children;
 
@@ -130,9 +153,7 @@ public:
 
 	string text;
 
-	Property* pDisplay;
+	vector<spProperty> props;
+	spDisplay pDisplay;
 };
-
-
-
 #endif

@@ -7,24 +7,21 @@ Loader::Loader(string _path, double width, double height)
 	pugi::xml_parse_result result;
 	result = doc.load_file(((_path).c_str()));
 
-	body =  new Element();
-	body->position = Vector2((double)GetSystemMetrics(SM_CXSIZEFRAME), (double)GetSystemMetrics(SM_CYCAPTION));
+	document =  new Element();
+	document->position = Vector2((double)GetSystemMetrics(SM_CXSIZEFRAME), (double)GetSystemMetrics(SM_CYCAPTION));
 
+	doc.append_child("document");
+	doc.child("document").append_move(doc.child("body"));
 
-	createElement(doc.child("body"), body);
+	document->width = width;
+	document->height = height;
+	document->type = "document";
+
+	//doc.save_file("indexGenerated.xml");
+	
+	createElement(doc.child("document")/*doc.child("body")*/, document);
 
 	double size = 0;
-
-
-	for (spElement el : body->children)
-	{
-		size += el->height;
-		if (el->width > width)
-			body->width = el->width;
-	}
-
-	if (size > height)
-		body->height = size;
 
 	//body->render();
 
@@ -33,80 +30,47 @@ Loader::Loader(string _path, double width, double height)
 
 void Loader::createElement(pugi::xml_node element, spElement parent)
 {
+	//Debug::console << element.name() << " ";
 	for (pugi::xml_node child : element.children())
 	{
+			//Debug::console << child.name() << "   ";
+
 		if (child.name() != "" || (child.type() == pugi::node_pcdata && child.text().as_string() != ""))
 		{
 			std::string name = child.name();
-			spElement el;
-			if (name == "img")
-				el = new Element(parent /*, types[child.name()], child.attribute("src").as_string(), child.attribute("id").as_string(), child.attribute("class").as_string()*/);
-			else
-				el = new Element(parent /*, types[child.name()], child.text().as_string(), child.attribute("id").as_string(), child.attribute("class").as_string()*/);
+			
+			spElement el = new Element(parent /*, types[child.name()], child.text().as_string(), child.attribute("id").as_string(), child.attribute("class").as_string()*/);
+
+			el->type = name;
 
 			if (child.type() == pugi::node_pcdata)
-				el->type = Html::TEXT;
+			{
+				el->type = "text";
+				//Debug::console << "This is" << el->type << "node : " << child.text().as_string() << endl;
+				el->text = child.text().as_string();
+			}
+
 
 			Vector2 position = Vector2(0, 0);
 
-			el->position = position;
-			el->text = child.text().as_string();
+			el->position = Vector2(0, 0);
+			
 
 
 			if (parent != NULL)
 			{
-				if (el->isInline() && !parent->isInline() /*&& parent->Type != TR && parent->Type != LI*/)
-				{
-					if (parent->children.size()>0 /*&& parent->getLastChild()->Type == 0*/)
-					{
-						parent->getLastChild()->addChild(el);
-
-					}
-					else
-					{
-						spElement row = new Element(parent/*, 0*/);
-
-						parent->addChild(row);
-
-						row->addChild(el);
-
-					}
-
-				}
-				else
-				{
 					parent->addChild(el);
-				}
-
-				if (child.text().as_string() != "")
-				{
-
-				}
 			}
-
-			//el->applyAttrStyles(child);
 
 			if (size_t n = std::distance(child.children().begin(), child.children().end()) > 0)
 				createElement(child, el);
 
 			
-			/*Vector2 size = el->calculateSize();
-			el->height(size.y);
-			el->width(size.x);
-			if (el->Parent->Type == ROW)
-			{
-				size = el->Parent->calculateSize();
-				el->Parent->height(size.y);
-				el->Parent->width(size.x);
-			}*/
-
 
 			pugi::xml_attribute attr = child.attribute("border");
 			if (attr)
 			{
-				/*el->Margin.x += attr.as_int();
-				el->Margin.y += attr.as_int();*/
-				//el->Background->createBorder(attr.as_int(), Color::Black, 0);
+
 			}
 		}
 	}

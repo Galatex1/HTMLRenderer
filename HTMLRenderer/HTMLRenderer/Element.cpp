@@ -4,27 +4,19 @@
 Element::Element()
 {
 	DOMparent = NULL;
-
-	position = Vector2(0.0, 0.0);
-	type = Html::ROW;
-
-	width = 0.0;
-	height = 0.0;
-
-	pWidth = new ValueType();
-	pHeight = new ValueType();
-	pMargin = new Side4();
-	pPadding = new Side4();
-
-	pDisplay = new Display(DOMparent,DisplayType::INLINE);
-	//pDisplay->setProperty();
+	Init();
 }
 
 
 Element::Element(spElement _parent) : DOMparent(_parent)
 {
+	Init();
+}
+
+void Element::Init()
+{
 	position = Vector2(0.0, 0.0);
-	type = Html::ROW;
+	type = "default";
 
 	width = 0.0;
 	height = 0.0;
@@ -34,8 +26,21 @@ Element::Element(spElement _parent) : DOMparent(_parent)
 	pMargin = new Side4();
 	pPadding = new Side4();
 
-	pDisplay = new Display(DOMparent, DisplayType::INLINE);
-	pDisplay->setProperty();
+	pDisplay = new Display(this, "block");
+}
+
+int Element::getIndex()
+{
+	int index = 0;
+	for each (spElement _e in DOMparent->children)
+	{
+		if (_e == this)
+			break;
+
+		index++;
+	}
+
+	return index;
 }
 
 Element::~Element()

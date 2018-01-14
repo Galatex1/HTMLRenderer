@@ -7,7 +7,11 @@
 #include <string>
 #include <map>
 
+#include "ref_counter.h"
+#include "Debug.h"
+
 #include "Property.h"
+
 
 using namespace std;
 
@@ -37,24 +41,31 @@ enum DisplayType
 
 };
 
+
+
 class Display : public Property
 {
 public:
 	//Default Constructor
-	Display(spElement _parent,DisplayType _type): Property("display",_parent), type(_type) {};
+	Display(spElement _parent, string _type): Property("display",_parent), type(_type) {};
 
 	//Deconstructor
 	~Display() {};
 
 	void setProperty();
-	void setInline();
-	void setBlock();
-	bool isInline() { if (type == 0 || (type > 2 && type < 6)) return true; return false; };
+	void setPreInline();
+	void setPostInline();
+	void setPreBlock();
+	void setPostBlock();
+	void setText();
+	void preChildRender();
+	void postChildRender();
+	bool isInline() {if( type.find("inline") != std::string::npos) return true; return false; };
 
 
 
 private:
-	DisplayType type;
+	string type;
 };
 
 

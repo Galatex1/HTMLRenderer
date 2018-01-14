@@ -15,6 +15,6 @@ public:
 	void Loader::createElement(pugi::xml_node element, spElement parent);
 	void applyAttrStyles(pugi::xml_node element);
 
-	spElement body;
+	spElement document;
 };
 

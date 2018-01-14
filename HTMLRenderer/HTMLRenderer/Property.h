@@ -8,34 +8,28 @@
 #include <string>
 #include <map>
 #include <memory>
-#include "ref_counter.h"
+#include "SmartPointers.h"
+
 
 
 using namespace std;
 
-class Element;
-typedef intrusive_ptr<Element> spElement;
-
-class Property
+class Property : public ref_counter
 {
 public:
 	//Default Constructor
-	Property() {};
-	Property(string _name, spElement _parent) : name(_name), parent(_parent) {};
+	Property(string _name, spElement _parent);
 
 	//Deconstructor
 	~Property() {};
 
-	virtual void setProperty(){};
-	virtual bool isInline() { return false; };
-
+	virtual void setProperty() = 0;
+	virtual void preChildRender() {};
+	virtual void postChildRender() {};
 
 protected:
 	string name;
-	spElement parent;
+	spElement owner;
 };
-
-
-
 
 #endif

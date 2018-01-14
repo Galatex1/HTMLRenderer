@@ -73,8 +73,11 @@ public:
 
     ~intrusive_ptr()
     {
-        if (_ptr)
-            intrusive_ptr_release(_ptr);
+		if (_ptr)
+		{
+			intrusive_ptr_release(_ptr);
+		}
+            
     }
 };
 

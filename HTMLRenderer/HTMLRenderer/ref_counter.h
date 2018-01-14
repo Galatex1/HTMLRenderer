@@ -2,6 +2,15 @@
 
 #include "intrusive_ptr.h"
 
+#define DECLARE_SMART(class_name, spname) class class_name;\
+    typedef intrusive_ptr<class_name> spname;
+
+#define DECLARENS_SMART(name_space, class_name, spname) namespace name_space \
+    {\
+        class class_name;\
+        typedef intrusive_ptr<class_name> spname;\
+    }
+
 
     /** RefCounter **/
     class ref_counter
@@ -44,15 +53,6 @@
     inline void intrusive_ptr_release(ref_counter* p)
     {
         p->releaseRef();
-    }
-
-#define DECLARE_SMART(class_name, spname) class class_name;\
-    typedef intrusive_ptr<class_name> spname;
-
-#define DECLARENS_SMART(name_space, class_name, spname) namespace name_space \
-    {\
-        class class_name;\
-        typedef intrusive_ptr<class_name> spname;\
     }
 
 
