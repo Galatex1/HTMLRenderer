@@ -118,8 +118,8 @@
     </Text>
   </ItemGroup>
   <ItemGroup>
-    <Xml Include="index.xml">
+    <None Include="index.html">
       <Filter>Soubory zdrojů</Filter>
-    </Xml>
+    </None>
   </ItemGroup>
 </Project>

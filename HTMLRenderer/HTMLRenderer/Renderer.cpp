@@ -105,10 +105,10 @@ void Renderer::renderDOM(cairo_t * cr, spElement _el)
 				el->position.y,
 				el->width,
 				el->height,
-				Color(255, 0, 0, 0.5),
+				Color(0, 255, 0, 0.3),
 				0.0,
-				1.0,
-				Color(0, 0, 0, 0.5)
+				3.0,
+				Color(0, 0, 0, 1)
 			);
 		}
 		else

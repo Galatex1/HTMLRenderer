@@ -146,14 +146,17 @@ public:
 	double width;
 	double height;
 
-	spValueType pWidth;
-	spValueType pHeight;
-	spSide4 pMargin;
-	spSide4 pPadding;
-
 	string text;
 
 	vector<spProperty> props;
 	spDisplay pDisplay;
+
+	spValueType pWidth;
+	spValueType pHeight;
+	spValueType pMaxWidth;
+	spValueType pMaxHeight;
+
+	spSide4 pMargin;
+	spSide4 pPadding;
 };
 #endif
