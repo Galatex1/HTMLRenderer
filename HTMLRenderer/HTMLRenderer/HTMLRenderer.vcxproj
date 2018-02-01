@@ -162,6 +162,7 @@
     <ClInclude Include="resource.h" />
     <ClInclude Include="ScalarMath.h" />
     <ClInclude Include="SmartPointers.h" />
+    <ClInclude Include="StrFunction.h" />
     <ClInclude Include="targetver.h" />
     <ClInclude Include="vector2.h" />
     <ClInclude Include="Visibility.h" />
@@ -175,6 +176,7 @@
     <ClCompile Include="Loader.cpp" />
     <ClCompile Include="Property.cpp" />
     <ClCompile Include="Renderer.cpp" />
+    <ClCompile Include="StrFunction.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="HTMLRenderer.rc" />

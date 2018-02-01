@@ -2,10 +2,9 @@
 # Tento soubor .gitignore byl automaticky vytvořen aplikací Microsoft(R) Visual Studio.
 ################################################################################
 
-/HTMLRenderer/HTMLRenderer/.vs
+/HTMLRenderer/.vs
 /HTMLRenderer/HTMLRenderer/Debug
-/HTMLRenderer/HTMLRenderer/HTMLRenderer
-/HTMLRenderer/HTMLRenderer/HTMLRenderer/x64
+/HTMLRenderer/Debug
 
 /HTMLRenderer/.vs/HTMLRenderer/v15/.suo
 /HTMLRenderer/.vs/HTMLRenderer/v15/Browse.VC.opendb

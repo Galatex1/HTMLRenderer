@@ -43,7 +43,7 @@ public:
 	//Params: cairo_t* cr, double x, double y, double width, double height, Color fill, double radius, double aspect (Aspect::    CIRCLE, SQUARE, NORMAL), double border, Color borderColor
 	void roundedRectangle(cairo_t* cr, double x = 0.0, double y = 0.0, double width = 0.0, double height = 0.0, Color fill = Color(0,0,0,0.0), double _radius = 10.0, double border = 0.0, Color borderColor = Color(0, 0, 0, 1.0), double aspect = Aspect::NORMAL);
 	
-	void text(cairo_t* cr, string text = "", double x = 0.0, double y = 0.0, double size = 13.0, cairo_font_slant_t slant = CAIRO_FONT_SLANT_NORMAL, cairo_font_weight_t weight = CAIRO_FONT_WEIGHT_NORMAL);
+	void text(cairo_t* cr, string text = "", double x = 0.0, double y = 0.0, double size = 13.0, Color fill = Color(0, 0, 0, 1.0), cairo_font_slant_t slant = CAIRO_FONT_SLANT_NORMAL, cairo_font_weight_t weight = CAIRO_FONT_WEIGHT_NORMAL);
 
 	void calculate(cairo_t * cr, spElement DOM);
 

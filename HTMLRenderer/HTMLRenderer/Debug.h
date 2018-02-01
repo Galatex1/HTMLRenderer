@@ -10,6 +10,7 @@
 //#include "Renderer.h"
 #include "Functionbuf.h"
 #include "SmartPointers.h"
+#include "StrFunction.h"
 
 
 

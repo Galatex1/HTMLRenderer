@@ -6,10 +6,16 @@ Debug Debug::console;
 
 void doLog(std::string const& value) {
 
-	if (value == "\n")
-		Debug::console.newLine();
-	else
-		Debug::console.log(value);
+	vector<string> lines = split(value, "\n", true);
+	
+	for each (string line in lines)
+	{
+		if (line == "\n")
+			Debug::console.newLine();
+		else
+			Debug::console.log(line);
+	}
+
 }
 
 void Debug::setParameters(cairo_t * _cr, double size, Color color, Vector2 pos, double _width, double _height)
@@ -21,6 +27,8 @@ void Debug::setParameters(cairo_t * _cr, double size, Color color, Vector2 pos, 
 	last_line = Vector2(0.0, 0.0);
 	width = _width;
 	height = _height;
+	p->roundedRectangle(cr, position.x, position.y - 20, width - 40, 20, Color(50, 50, 50, 1), 7);
+	p->text(cr, "Console", position.x+4, position.y - 16, 16.0, Color(255,255,255,1));
 }
 
 void Debug::log(std::string const & message) {

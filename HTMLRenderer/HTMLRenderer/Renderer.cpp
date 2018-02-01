@@ -47,15 +47,16 @@ void Renderer::roundedRectangle(cairo_t * cr, double x, double y, double width, 
 	cairo_stroke(cr);
 }
 
-void Renderer::text(cairo_t* cr, string text, double x, double y, double size, cairo_font_slant_t slant, cairo_font_weight_t weight)
+void Renderer::text(cairo_t* cr, string text, double x, double y, double size, Color fill, cairo_font_slant_t slant, cairo_font_weight_t weight)
 {
 	cairo_select_font_face(cr, "Sans", slant, weight);
 	cairo_set_font_size(cr, size);
+	cairo_set_source_rgba(cr, fill.r, fill.g, fill.b, fill.a);
 
 	cairo_text_extents_t extents;
 	cairo_text_extents(cr, text.c_str(), &extents);
 
-	cairo_move_to(cr, x, y + extents.y_advance);
+	cairo_move_to(cr, x, y + extents.height);
 
 	cairo_show_text(cr, text.c_str());
 	//cairo_fill(cr);
@@ -64,9 +65,6 @@ void Renderer::text(cairo_t* cr, string text, double x, double y, double size, c
 void Renderer::calculate(cairo_t * cr, spElement _el)
 {
 	int i = 0;
-
-	//Debug::console << _el->height << ": ";
-	//Debug::console << _el->width << endl;
 
 	for each (spElement el in _el->children)
 	{
@@ -85,12 +83,10 @@ void Renderer::calculate(cairo_t * cr, spElement _el)
 
 		el->allPreChildRender();
 
-		if (size_t n = std::distance(el->children.begin(), el->children.end()) > 0)
+		if (el->children.size() > 0)
 			calculate(cr, el);
 
 		el->allPostChildRender();
-
-		el->allProperties();
 
 		i++;
 	}
@@ -102,10 +98,6 @@ void Renderer::renderDOM(cairo_t * cr, spElement _el)
 
 	for each (spElement el in _el->children)
 	{
-		//el->allProperties();
-
-		Debug::console << "rendering " << el->type << ", position: (" << el->position.x << ", " << el->position.y << "), width: " << el->width << ", height: " << el->height << endl;
-
 		if (el->type != "text")
 		{
 			roundedRectangle(cr,
@@ -113,17 +105,18 @@ void Renderer::renderDOM(cairo_t * cr, spElement _el)
 				el->position.y,
 				el->width,
 				el->height,
-				Color(255,125,0, 0.1),
+				Color(255, 0, 0, 0.5),
 				0.0,
-				0.0
+				1.0,
+				Color(0, 0, 0, 0.5)
 			);
 		}
 		else
 		{
-			text(cr, el->text, el->position.x, el->position.y);
+			text(cr, el->text, el->position.x, el->position.y/*,13.0,Color(0,0,0,1.0)*/);
 		}
 
-		if (size_t n = std::distance(el->children.begin(), el->children.end()) > 0)
+		if (el->children.size() > 0)
 			renderDOM(cr, el);
 
 		i++;

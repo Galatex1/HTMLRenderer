@@ -5,7 +5,7 @@ Loader::Loader(string _path, double width, double height)
 {
 	pugi::xml_document doc;
 	pugi::xml_parse_result result;
-	result = doc.load_file(((_path).c_str()));
+	result = doc.load_file(((_path).c_str()), 116U | pugi::parse_trim_pcdata);
 
 	document =  new Element();
 	document->position = Vector2((double)GetSystemMetrics(SM_CXSIZEFRAME), (double)GetSystemMetrics(SM_CYCAPTION));
@@ -33,7 +33,6 @@ void Loader::createElement(pugi::xml_node element, spElement parent)
 	//Debug::console << element.name() << " ";
 	for (pugi::xml_node child : element.children())
 	{
-			//Debug::console << child.name() << "   ";
 
 		if (child.name() != "" || (child.type() == pugi::node_pcdata && child.text().as_string() != ""))
 		{
@@ -43,12 +42,17 @@ void Loader::createElement(pugi::xml_node element, spElement parent)
 
 			el->type = name;
 
+			
+
 			if (child.type() == pugi::node_pcdata)
 			{
 				el->type = "text";
 				//Debug::console << "This is" << el->type << "node : " << child.text().as_string() << endl;
 				el->text = child.text().as_string();
+				replaceAll(el->text, "\n", "");
 			}
+
+			//Debug::console << "This is " << el->type << " node : " << el->text << " Parent: " << parent->type << endl;
 
 
 			Vector2 position = Vector2(0, 0);
@@ -65,13 +69,6 @@ void Loader::createElement(pugi::xml_node element, spElement parent)
 			if (size_t n = std::distance(child.children().begin(), child.children().end()) > 0)
 				createElement(child, el);
 
-			
-
-			pugi::xml_attribute attr = child.attribute("border");
-			if (attr)
-			{
-
-			}
 		}
 	}
 }
