@@ -13,7 +13,7 @@ public:
 	~Loader();
 
 	void Loader::createElement(pugi::xml_node element, spElement parent);
-	void applyAttrStyles(pugi::xml_node element);
+	void applyAttrStyles(pugi::xml_node element, spElement DOMelement);
 
 	spElement document;
 };

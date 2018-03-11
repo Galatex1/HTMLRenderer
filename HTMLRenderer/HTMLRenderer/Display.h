@@ -53,14 +53,22 @@ public:
 	~Display() {};
 
 	void setProperty();
-	void setPreInline();
-	void setPostInline();
-	void setPreBlock();
-	void setPostBlock();
 	void setText();
 	void preChildRender();
 	void postChildRender();
-	bool isInline() {if( type.find("inline") != std::string::npos) return true; return false; };
+	bool isInline() {if( type.find("inline") != std::string::npos) return true;
+	return false; };
+	void setType(string _type) { type = _type; };
+
+	//Display Inline
+	void setPreInline();
+	void setPostInline();\
+	//Display Block
+	void setPreBlock();
+	void setPostBlock();
+	//Display List
+	void setPreListItem();
+	void setPostListItem();
 
 
 

@@ -149,9 +149,11 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="Color.h" />
+    <ClInclude Include="ColorEnum.h" />
     <ClInclude Include="Debug.h" />
     <ClInclude Include="Display.h" />
     <ClInclude Include="Element.h" />
+    <ClInclude Include="enumFactory.h" />
     <ClInclude Include="Functionbuf.h" />
     <ClInclude Include="HTMLRenderer.h" />
     <ClInclude Include="intrusive_ptr.h" />

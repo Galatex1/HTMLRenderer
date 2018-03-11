@@ -100,20 +100,36 @@ void Renderer::renderDOM(cairo_t * cr, spElement _el)
 	{
 		if (el->type != "text")
 		{
-			roundedRectangle(cr,
-				el->position.x,
-				el->position.y,
-				el->width,
-				el->height,
-				Color(0, 255, 0, 0.3),
-				0.0,
-				3.0,
-				Color(0, 0, 0, 1)
-			);
+			if (el->type == "input")
+			{
+				roundedRectangle(cr,
+					el->position.x,
+					el->position.y,
+					el->width,
+					el->height,
+					Color(255, 255, 255, 1.0),
+					0.0,
+					0.7,
+					Color(0, 0, 0, 1.0)
+				);
+			}
+			else
+			{
+				roundedRectangle(cr,
+					el->position.x,
+					el->position.y,
+					el->width,
+					el->height,
+					el->pBackgroundColor,
+					0.0,
+					1.0,
+					Color(0, 0, 0, 1)
+				);
+			}
 		}
 		else
 		{
-			text(cr, el->text, el->position.x, el->position.y/*,13.0,Color(0,0,0,1.0)*/);
+			text(cr, el->text, el->position.x, el->position.y,13.0,el->pColor);
 		}
 
 		if (el->children.size() > 0)

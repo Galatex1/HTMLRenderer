@@ -85,11 +85,14 @@ public:
 		pBottom = new ValueType();
 	};
 	Side4(spValueType _top, spValueType _left, spValueType _right, spValueType _bottom ) : pTop(_top), pLeft(_left), pRight(_right), pBottom(_bottom) {};
+	Side4(double _value, string _type) : pTop(new ValueType(_value, _type)), pLeft(new ValueType(_value, _type)), pRight(new ValueType(_value, _type)), pBottom(new ValueType(_value, _type)) {};
 
 	~Side4(){};
 
-	double x() { return pLeft->value - pRight->value; };
-	double y() { return pTop->value - pBottom->value; };
+	double x() { return pLeft->value; };
+	double y() { return pTop->value; };
+	void twoVals(double y, double x) { pTop->value = y; pLeft->value = x; pBottom->value = y; pRight->value = x; };
+
 
 	spValueType pTop;
 	spValueType pLeft;
@@ -129,6 +132,17 @@ public:
 		}
 	};
 
+	spElement getAbsoluteSizedParent() {
+
+		spElement ASParent = DOMparent;
+
+		while (ASParent && ASParent->isInline())
+		{
+			ASParent = ASParent->DOMparent;
+		}
+
+		return ASParent ? ASParent : this ;
+	}
 
 	int getIndex();
 
@@ -155,6 +169,9 @@ public:
 	spValueType pHeight;
 	spValueType pMaxWidth;
 	spValueType pMaxHeight;
+
+	Color pBackgroundColor;
+	Color pColor;
 
 	spSide4 pMargin;
 	spSide4 pPadding;

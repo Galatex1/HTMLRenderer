@@ -26,7 +26,7 @@ void Element::Init()
 	pMargin = new Side4();
 	pPadding = new Side4();
 
-	pDisplay = new Display(this, "block");
+	pDisplay = new Display(this, "inline");
 }
 
 int Element::getIndex()

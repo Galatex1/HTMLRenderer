@@ -13,6 +13,12 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="Hlavičkové soubory\Elements">
+      <UniqueIdentifier>{edc4dd90-cecf-4e73-bba8-2de1eda4bcc1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Hlavičkové soubory\EnumFactory">
+      <UniqueIdentifier>{caf616a3-b29a-4a7f-af68-9dc4da490c78}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="targetver.h">
@@ -68,6 +74,12 @@
     </ClInclude>
     <ClInclude Include="StrFunction.h">
       <Filter>Hlavičkové soubory</Filter>
+    </ClInclude>
+    <ClInclude Include="ColorEnum.h">
+      <Filter>Hlavičkové soubory\EnumFactory</Filter>
+    </ClInclude>
+    <ClInclude Include="enumFactory.h">
+      <Filter>Hlavičkové soubory\EnumFactory</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
