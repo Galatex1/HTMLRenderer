@@ -21,6 +21,7 @@ Loader::Loader(string _path, double width, double height)
 	document->pDisplay->setType("block");
 	document->pPadding->twoVals(10, 50);
 	document->pColor = Color(0.0, 0.0, 0.0, 1.0);
+	document->pBackgroundColor = Color(1.0, 1.0, 1.0, 1.0);
 
 	//doc.save_file("indexGenerated.xml");
 	
@@ -138,6 +139,8 @@ void Loader::applyAttrStyles(pugi::xml_node element, spElement DOMelement)
 			//Margin.x += attr.as_int();
 			//Margin.y += attr.as_int();
 			//Background->createBorder(attr.as_int(), Color::Black, 0);
+			DOMelement->pBorderSize = new Side4(attr.as_int(), "px");
+			DOMelement->pBorderColor = Colors::BLACK;
 		}
 	}
 }

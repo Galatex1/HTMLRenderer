@@ -1,5 +1,6 @@
 #include "Renderer.h"
 #include "Debug.h"
+#include "CairoSurface.h"
 #include <ctime>
 
 double Aspect::CIRCLE = 0.5;
@@ -113,6 +114,19 @@ void Renderer::renderDOM(cairo_t * cr, spElement _el)
 					Color(0, 0, 0, 1.0)
 				);
 			}
+			else if (el->type == "button")
+			{
+				roundedGradiantRectangle(cr,
+					el->position.x,
+					el->position.y,
+					el->width,
+					el->height,
+					Color(255, 255, 255, 1.0),
+					3.0,
+					1,
+					Color(112, 112, 112, 1.0)
+				);
+			}
 			else
 			{
 				roundedRectangle(cr,
@@ -122,8 +136,8 @@ void Renderer::renderDOM(cairo_t * cr, spElement _el)
 					el->height,
 					el->pBackgroundColor,
 					0.0,
-					1.0,
-					Color(0, 0, 0, 1)
+					el->pBorderSize->x(),
+					el->pBorderColor
 				);
 			}
 		}
@@ -145,4 +159,70 @@ void Renderer::doRender(cairo_t * cr, spElement DOM)
 	renderDOM(cr, DOM);
 }
 
+//void Renderer::draw_gradient(cairo_t *cr, double width)
+//{
+//	cairo_pattern_t *pat;
+//	pat = cairo_pattern_create_linear(20.0, 260.0, 20.0, 360.0);
+//
+//	cairo_pattern_add_color_stop_rgb(pat, 0, 0.9490196078431373, 0.9490196078431373, 0.9490196078431373);
+//	cairo_pattern_add_color_stop_rgb(pat, 0.5, 0.9215686274509804, 0.9215686274509804, 0.9215686274509804);
+//	cairo_pattern_add_color_stop_rgb(pat, 0.500000000000001, 0.8666666666666667, 0.8666666666666667, 0.8666666666666667);
+//	cairo_pattern_add_color_stop_rgb(pat, 1, 0.8117647058823529, 0.8117647058823529, 0.8117647058823529);
+//
+//	cairo_rectangle(cr, 20, 260, width, width);
+//	cairo_set_source(cr, pat);
+//	cairo_fill(cr);
+//
+//	cairo_pattern_destroy(pat);
+//}
 
+void Renderer::roundedGradiantRectangle(cairo_t * cr, double x, double y, double width, double height, Color fill, double _radius, double border, Color borderColor, double aspect)
+{
+	/* a custom shape that could be wrapped in a function */
+	double corner_radius = _radius;/*height / _radius;   /* and corner curvature radius */
+
+	double radius = aspect > 0 ? aspect == Aspect::CIRCLE ? width > height ? height / 2 : width / 2 : corner_radius / aspect : 0;
+	double degrees = M_PI / 180.0;
+	cairo_new_sub_path(cr);
+	cairo_arc(cr, x + width - radius, y + radius, radius, -90 * degrees, 0 * degrees);
+	cairo_arc(cr, x + width - radius, y + height - radius, radius, 0 * degrees, 90 * degrees);
+	cairo_arc(cr, x + radius, y + height - radius, radius, 90 * degrees, 180 * degrees);
+	cairo_arc(cr, x + radius, y + radius, radius, 180 * degrees, 270 * degrees);
+	cairo_close_path(cr);
+
+    cairo_surface_t* sur1 = cairo_surface_create_for_rectangle(CSurface::surface, x, y, width, height);
+
+	cairo_pattern_t *pat;
+	Debug::console << "x: " << x << ", y: " << y << ", h: " << height << ", w: " << width << endl;
+	//pat = cairo_pattern_create_linear( y+height/4.0, x, y+height/4.0, x+width);
+	pat = cairo_pattern_create_for_surface(sur1);
+
+	//cairo_patte
+
+	/*cairo_matrix_t matrix;
+	cairo_matrix_init_scale(&matrix, 100, 100);
+	cairo_matrix_init_translate(&matrix, 0.0, 0.0);
+	cairo_pattern_set_matrix(pat, &matrix);*/
+
+		//cairo_pattern_set_extend(pat, CAIRO_EXTEND_NONE);
+
+
+	cairo_pattern_add_color_stop_rgb(pat, 0, 0.9490196078431373, 0.9490196078431373, 0.9490196078431373);
+	cairo_pattern_add_color_stop_rgb(pat, 0.5, 0.9215686274509804, 0.9215686274509804, 0.9215686274509804);
+	cairo_pattern_add_color_stop_rgb(pat, 0.5, 0.8666666666666667, 0.8666666666666667, 0.8666666666666667);
+	cairo_pattern_add_color_stop_rgb(pat, 1, 0.8117647058823529, 0.8117647058823529, 0.8117647058823529);
+
+	//cairo_set_source_rgba(cr, fill.r, fill.g, fill.b, fill.a);
+	cairo_set_source(cr, pat);
+
+	//cairo_fill(cr);
+	cairo_fill_preserve(cr);
+
+	cairo_pattern_destroy(pat);
+
+	cairo_set_source_rgba(cr, borderColor.r, borderColor.g, borderColor.b, borderColor.a);
+	cairo_set_line_width(cr, border);
+	cairo_stroke(cr);
+}
+
+//0.8117647058823529

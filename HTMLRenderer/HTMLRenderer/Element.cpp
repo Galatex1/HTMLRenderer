@@ -26,6 +26,8 @@ void Element::Init()
 	pMargin = new Side4();
 	pPadding = new Side4();
 
+	pBorderSize = new Side4();
+
 	pDisplay = new Display(this, "inline");
 }
 

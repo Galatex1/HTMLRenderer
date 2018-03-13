@@ -74,3 +74,10 @@ vector<vector<string>> getLines(vector<string> texts)
 	}
 	return lines;
 }
+wchar_t *CharToLPCWSTR(const char* charArray)
+{
+	wchar_t* wString = new wchar_t[4096];
+	MultiByteToWideChar(CP_ACP, 0, charArray, -1, wString, 4096);
+	return wString;
+}
+

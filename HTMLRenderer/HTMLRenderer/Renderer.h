@@ -17,6 +17,10 @@
 using namespace std;
 using namespace HTMLParser;
 
+
+
+
+
 #define M_PI 3.14
 
 class Aspect
@@ -50,6 +54,9 @@ public:
 	void renderDOM(cairo_t * cr, spElement DOM);
 
 	void doRender(cairo_t * cr, spElement DOM);
+
+	//void draw_gradient(cairo_t *cr, double width);
+	void roundedGradiantRectangle(cairo_t* cr, double x = 0.0, double y = 0.0, double width = 0.0, double height = 0.0, Color fill = Color(0, 0, 0, 0.0), double _radius = 10.0, double border = 0.0, Color borderColor = Color(0, 0, 0, 1.0), double aspect = Aspect::NORMAL);
 
 
 private:

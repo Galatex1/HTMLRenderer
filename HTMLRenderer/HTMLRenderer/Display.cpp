@@ -94,10 +94,10 @@ void Display::setPreBlock() {
 
 	double width = parent->width;
 
-	owner->pPadding->pLeft = owner->pPadding->pLeft->value > 1.0 ? owner->pPadding->pLeft : new ValueType(10.0, "px");
-	owner->pPadding->pRight = owner->pPadding->pRight->value > 1.0 ? owner->pPadding->pRight : new ValueType(10.0, "px");
-	owner->pPadding->pTop = owner->pPadding->pTop->value > 1.0 ? owner->pPadding->pTop : new ValueType(10.0, "px");
-	owner->pPadding->pBottom = owner->pPadding->pBottom->value > 1.0 ? owner->pPadding->pBottom : new ValueType(10.0, "px");
+	owner->pPadding->pLeft = owner->pPadding->pLeft->value > 1.0 ? owner->pPadding->pLeft : new ValueType(3, "px");
+	owner->pPadding->pRight = owner->pPadding->pRight->value > 1.0 ? owner->pPadding->pRight : new ValueType(3, "px");
+	owner->pPadding->pTop = owner->pPadding->pTop->value > 1.0 ? owner->pPadding->pTop : new ValueType(3, "px");
+	owner->pPadding->pBottom = owner->pPadding->pBottom->value > 1.0 ? owner->pPadding->pBottom : new ValueType(3, "px");
 
 	owner->position = Vector2(0.0, 0.0);
 

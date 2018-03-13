@@ -173,6 +173,9 @@ public:
 	Color pBackgroundColor;
 	Color pColor;
 
+	Color pBorderColor;
+	spSide4 pBorderSize;
+
 	spSide4 pMargin;
 	spSide4 pPadding;
 };

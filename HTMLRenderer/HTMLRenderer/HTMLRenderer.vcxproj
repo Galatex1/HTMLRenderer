@@ -148,6 +148,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="CairoSurface.h" />
     <ClInclude Include="Color.h" />
     <ClInclude Include="ColorEnum.h" />
     <ClInclude Include="Debug.h" />
@@ -171,6 +172,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\pugixml\src\pugixml.cpp" />
+    <ClCompile Include="CairoSurface.cpp" />
     <ClCompile Include="Debug.cpp" />
     <ClCompile Include="Display.cpp" />
     <ClCompile Include="Element.cpp" />

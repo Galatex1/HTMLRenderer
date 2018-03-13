@@ -81,6 +81,9 @@
     <ClInclude Include="enumFactory.h">
       <Filter>Hlavičkové soubory\EnumFactory</Filter>
     </ClInclude>
+    <ClInclude Include="CairoSurface.h">
+      <Filter>Hlavičkové soubory</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="HTMLRenderer.cpp">
@@ -108,6 +111,9 @@
       <Filter>Zdrojové soubory</Filter>
     </ClCompile>
     <ClCompile Include="StrFunction.cpp">
+      <Filter>Zdrojové soubory</Filter>
+    </ClCompile>
+    <ClCompile Include="CairoSurface.cpp">
       <Filter>Zdrojové soubory</Filter>
     </ClCompile>
   </ItemGroup>
