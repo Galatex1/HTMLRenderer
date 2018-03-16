@@ -113,40 +113,16 @@ public:
 	bool isInline() { return pDisplay->isInline(); };
 	void addChild(spElement e) { children.push_back(e); e->DOMparent = this;};
 	spElement getLastChild() { return children.back(); };
-	void allProperties() {
-		for each (spProperty prop in props)
-		{
-			prop->setProperty();
-		}
-	};
-	void allPostChildRender() {
-		for each (spProperty prop in props)
-		{
-			prop->postChildRender();
-		}
-	};
-	void allPreChildRender() {
-		for each (spProperty prop in props)
-		{
-			prop->preChildRender();
-		}
-	};
-
-	spElement getAbsoluteSizedParent() {
-
-		spElement ASParent = DOMparent;
-
-		while (ASParent && ASParent->isInline())
-		{
-			ASParent = ASParent->DOMparent;
-		}
-
-		return ASParent ? ASParent : this ;
-	}
+	void allProperties();
+	void allPostChildRender();
+	void allPreChildRender();
+	spElement getAbsoluteSizedParent();
 
 	bool hasChildren() { return children.size() > 0 ? true : false; };
 
 	int getIndex();
+
+	Vector2 getPos();
 
 
 

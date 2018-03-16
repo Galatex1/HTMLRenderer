@@ -31,6 +31,39 @@ void Element::Init()
 	pDisplay = new Display(this, "inline");
 }
 
+void Element::allProperties() {
+	for each (spProperty prop in props)
+	{
+		prop->setProperty();
+	}
+}
+
+void Element::allPostChildRender() {
+	for each (spProperty prop in props)
+	{
+		prop->postChildRender();
+	}
+}
+
+void Element::allPreChildRender() {
+	for each (spProperty prop in props)
+	{
+		prop->preChildRender();
+	}
+}
+
+spElement Element::getAbsoluteSizedParent() {
+
+	spElement ASParent = DOMparent;
+
+	while (ASParent && ASParent->isInline())
+	{
+		ASParent = ASParent->DOMparent;
+	}
+
+	return ASParent ? ASParent : this;
+}
+
 int Element::getIndex()
 {
 	int index = 0;
@@ -43,6 +76,13 @@ int Element::getIndex()
 	}
 
 	return index;
+}
+
+Vector2 Element::getPos() {
+	if (DOMparent)
+		return position + DOMparent->getPos();
+	else
+		return position;
 }
 
 Element::~Element()

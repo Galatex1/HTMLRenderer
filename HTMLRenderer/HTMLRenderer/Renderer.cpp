@@ -58,9 +58,22 @@ void Renderer::text(cairo_t* cr, string text, double x, double y, double size, C
 	cairo_text_extents_t extents;
 	cairo_text_extents(cr, text.c_str(), &extents);
 
-	cairo_move_to(cr, x, y + extents.height);
+	cairo_move_to(cr, x, y + size - 2);
 
 	cairo_show_text(cr, text.c_str());
+
+
+	///* draw helping lines */
+	//cairo_set_source_rgba(cr, 1, 0.2, 0.2, 0.6);
+	//cairo_set_line_width(cr, 2.0);
+	//cairo_arc(cr, x, y, 4.0, 0, 2 * M_PI);
+	//cairo_fill(cr);
+	//cairo_move_to(cr, x, y);
+	//cairo_rel_line_to(cr, 0, -extents.height);
+	//cairo_rel_line_to(cr, extents.width, 0);
+	//cairo_rel_line_to(cr, extents.x_bearing, -extents.y_bearing);
+	//cairo_stroke(cr);
+
 	//cairo_fill(cr);
 }
 
@@ -101,8 +114,8 @@ void Renderer::renderDOM(cairo_t * cr, spElement _el)
 	if (_el->type == "document")
 	{
 		roundedRectangle(cr,
-			_el->position.x,
-			_el->position.y,
+			_el->getPos().x,
+			_el->getPos().y,
 			_el->width,
 			_el->height,
 			_el->pBackgroundColor,
@@ -120,8 +133,8 @@ void Renderer::renderDOM(cairo_t * cr, spElement _el)
 			{
 				if(el->input == "text")
 					roundedRectangle(cr,
-						el->position.x,
-						el->position.y,
+						el->getPos().x,
+						el->getPos().y,
 						el->width,
 						el->height,
 						Color(255, 255, 255, 1.0),
@@ -136,8 +149,8 @@ void Renderer::renderDOM(cairo_t * cr, spElement _el)
 					el->height = el->height > SIZE ? el->height : SIZE;*/
 
 					roundedRectangle(cr,
-						el->position.x,
-						el->position.y,
+						el->getPos().x,
+						el->getPos().y,
 						el->width,
 						el->height,
 						Color(0.9215686274509804, 0.9215686274509804, 0.9215686274509804, 1.0),
@@ -150,8 +163,8 @@ void Renderer::renderDOM(cairo_t * cr, spElement _el)
 			else if (el->type == "button")
 			{
 				roundedGradiantRectangle(cr,
-					el->position.x,
-					el->position.y,
+					el->getPos().x,
+					el->getPos().y,
 					el->width,
 					el->height,
 					Color(255, 255, 255, 1.0),
@@ -163,8 +176,8 @@ void Renderer::renderDOM(cairo_t * cr, spElement _el)
 			else
 			{
 				roundedRectangle(cr,
-					el->position.x,
-					el->position.y,
+					el->getPos().x,
+					el->getPos().y,
 					el->width,
 					el->height,
 					el->pBackgroundColor,
@@ -176,7 +189,7 @@ void Renderer::renderDOM(cairo_t * cr, spElement _el)
 		}
 		else
 		{
-			text(cr, el->text, el->position.x, el->position.y,13.0,el->pColor);
+			text(cr, el->text, el->getPos().x, el->getPos().y,13.0,el->pColor);
 		}
 
 		if (el->children.size() > 0)
@@ -227,29 +240,34 @@ void Renderer::roundedGradiantRectangle(cairo_t * cr, double x, double y, double
 
 	cairo_pattern_t *pat;
 	
-	pat = cairo_pattern_create_linear( y+height/4.0, x, y+height/4.0, x+width);
+	pat = cairo_pattern_create_linear( y+height/2.0, x, y+height/2.0, x+width);
 	//pat = cairo_pattern_create_for_surface(sur1);
+
+	//Debug::console << "Height: " << height << ",   ";
 
 	//cairo_patte
 
 	double WinWidth = CSurface::WindowRect.right - CSurface::WindowRect.left;
 	double WinHeight = CSurface::WindowRect.bottom - CSurface::WindowRect.top;
 
-	double scaleH = (950*2) / height;
+	double scaleH = (height+58) / height;
 
 	
 	cairo_matrix_t matrix;
 	cairo_get_matrix(cr, &matrix);
-	cairo_matrix_scale(&matrix, 1, scaleH);
-	cairo_matrix_translate(&matrix, 0, -y);
+	//cairo_matrix_init_scale(&matrix, 1, 1);
+	cairo_matrix_init_translate(&matrix, 0, -y + (height/2) );
+
 	cairo_pattern_set_matrix(pat, &matrix);
 
-	cairo_pattern_set_extend(pat, /*CAIRO_EXTEND_PAD*/CAIRO_EXTEND_NONE);
+	//Debug::console << " -y: " << -y << ", ScaleH: " << scaleH << endl;
+
+	cairo_pattern_set_extend(pat, CAIRO_EXTEND_PAD);
 
 
-	cairo_pattern_add_color_stop_rgb(pat, 0, 0.9490196078431373, 0.9490196078431373, 0.9490196078431373);
-	cairo_pattern_add_color_stop_rgb(pat, 0.5, 0.9215686274509804, 0.9215686274509804, 0.9215686274509804);
-	cairo_pattern_add_color_stop_rgb(pat, 0.5, 0.8666666666666667, 0.8666666666666667, 0.8666666666666667);
+	//cairo_pattern_add_color_stop_rgb(pat, 0, 0.9490196078431373, 0.9490196078431373, 0.9490196078431373);
+	//cairo_pattern_add_color_stop_rgb(pat, 0.5, 0.9215686274509804, 0.9215686274509804, 0.9215686274509804);
+	//cairo_pattern_add_color_stop_rgb(pat, 0.6, 0.8666666666666667, 0.8666666666666667, 0.8666666666666667);
 	cairo_pattern_add_color_stop_rgb(pat, 1, 0.8117647058823529, 0.8117647058823529, 0.8117647058823529);
 
 	cairo_set_source(cr, pat);
@@ -260,7 +278,7 @@ void Renderer::roundedGradiantRectangle(cairo_t * cr, double x, double y, double
 	cairo_set_line_width(cr, border);
 	cairo_stroke(cr);
 
-	Debug::console << "x: " << x << ", y: " << y << ", h: " << height << ", w: " << width << ", winHeight: " <<WinHeight << endl;
+	//Debug::console << "x: " << x << ", y: " << y << ", h: " << height << ", w: " << width << ", winHeight: " <<WinHeight << endl;
 }
 
 //0.8117647058823529

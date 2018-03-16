@@ -41,13 +41,13 @@ public:
 
 };
 
-class ofunctionstream: private virtual functionbuf, public std::ostream 
-{
-public:
-	ofunctionstream(function_type const& function): functionbuf(function), std::ostream(static_cast<std::streambuf*>(this)) 
-	{
-		this->flags(std::ios_base::unitbuf);
-	}
-};
+//class ofunctionstream: private virtual functionbuf, public std::ostream 
+//{
+//public:
+//	ofunctionstream(function_type const& function): functionbuf(function), std::ostream(static_cast<std::streambuf*>(this)) 
+//	{
+//		this->flags(std::ios_base::unitbuf);
+//	}
+//};
 
 #endif

@@ -36,9 +36,10 @@ vector<string> split(const string & str, const string & delim, bool keepDelimite
 		if (!token.empty())
 		{
 			tokens.push_back(token);
-			if (keepDelimiter && delimiter)
-				tokens.push_back(delim);
 		}
+
+		if (keepDelimiter && delimiter)
+			tokens.push_back(delim);
 
 		prev = pos + delim.length();
 
