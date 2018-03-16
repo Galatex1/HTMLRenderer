@@ -144,6 +144,8 @@ public:
 		return ASParent ? ASParent : this ;
 	}
 
+	bool hasChildren() { return children.size() > 0 ? true : false; };
+
 	int getIndex();
 
 
@@ -152,11 +154,11 @@ public:
 	~Element();
 	
 	string type;
+	string input;
 	spElement DOMparent;
 	vector<spElement> children;
 
 	Vector2 position;
-
 	double width;
 	double height;
 

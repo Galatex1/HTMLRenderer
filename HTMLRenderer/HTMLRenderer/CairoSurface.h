@@ -12,6 +12,7 @@ public:
 
 	static cairo_surface_t* surface;
 	static cairo_t* cr;
+	static RECT WindowRect;
 
 };
 

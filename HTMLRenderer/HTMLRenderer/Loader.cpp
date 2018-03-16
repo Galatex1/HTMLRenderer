@@ -5,12 +5,28 @@
 
 Loader::Loader(string _path, double width, double height)
 {
+
+
+	display = {
+		make_pair("div", "block"),
+		make_pair("li", "list-item"),
+		make_pair("ul", "block"),
+		make_pair("br", "block"),
+		make_pair("button", "inline"),
+		make_pair("img", "inline"),
+		make_pair("select", "inline"),
+		make_pair("option", "inline"),
+		make_pair("input", "inline"),
+		make_pair("text", "text"),
+	};
+
 	pugi::xml_document doc;
 	pugi::xml_parse_result result;
 	result = doc.load_file(((_path).c_str()), 116U | pugi::parse_trim_pcdata);
 
 	document =  new Element();
-	document->position = Vector2((double)GetSystemMetrics(SM_CXSIZEFRAME), (double)GetSystemMetrics(SM_CYCAPTION));
+	//document->position = Vector2((double)GetSystemMetrics(SM_CXSIZEFRAME), (double)GetSystemMetrics(SM_CYCAPTION));
+	document->position = Vector2(0.0, 0.0);
 
 	doc.append_child("document");
 	doc.child("document").append_move(doc.child("body"));
@@ -48,6 +64,7 @@ void Loader::createElement(pugi::xml_node element, spElement parent)
 
 			el->type = name;
 			el->pColor = parent->pColor;
+			el->input = "";
 			
 
 			if (child.type() == pugi::node_pcdata)
@@ -59,7 +76,12 @@ void Loader::createElement(pugi::xml_node element, spElement parent)
 			}
 			else
 			{
-				el->pDisplay->setType("block");
+
+				if(display.find(el->type) == display.end())
+					el->pDisplay->setType("block");
+				else
+					el->pDisplay->setType(display[el->type]);
+
 
 				applyAttrStyles(child, el);
 
@@ -89,6 +111,7 @@ void Loader::createElement(pugi::xml_node element, spElement parent)
 		}
 	}
 }
+
 
 void Loader::applyAttrStyles(pugi::xml_node element, spElement DOMelement)
 {
@@ -141,6 +164,17 @@ void Loader::applyAttrStyles(pugi::xml_node element, spElement DOMelement)
 			//Background->createBorder(attr.as_int(), Color::Black, 0);
 			DOMelement->pBorderSize = new Side4(attr.as_int(), "px");
 			DOMelement->pBorderColor = Colors::BLACK;
+		}
+		else if (DOMelement->type == "input" && name == "type")
+		{
+			DOMelement->input = attr.as_string();
+
+			if (DOMelement->input == "checkbox")
+			{
+				DOMelement->pMargin->twoVals(3.0, 3.0);
+				DOMelement->pWidth->value = 8;
+				DOMelement->pHeight->value = 8;
+			}
 		}
 	}
 }

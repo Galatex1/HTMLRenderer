@@ -16,5 +16,7 @@ public:
 	void applyAttrStyles(pugi::xml_node element, spElement DOMelement);
 
 	spElement document;
+
+	map<string, string> display;
 };
 

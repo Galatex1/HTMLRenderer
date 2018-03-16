@@ -46,6 +46,7 @@ void Renderer::roundedRectangle(cairo_t * cr, double x, double y, double width, 
 	cairo_set_source_rgba(cr, borderColor.r, borderColor.g, borderColor.b, borderColor.a);
 	cairo_set_line_width(cr, border);
 	cairo_stroke(cr);
+	cairo_stroke(cr);
 }
 
 void Renderer::text(cairo_t* cr, string text, double x, double y, double size, Color fill, cairo_font_slant_t slant, cairo_font_weight_t weight)
@@ -70,8 +71,8 @@ void Renderer::calculate(cairo_t * cr, spElement _el)
 	for each (spElement el in _el->children)
 	{
 		el->position = Vector2(0.0, 0.0);
-		el->width = 0.0;
-		el->height = 0.0;
+		el->width = el->pWidth->value;
+		el->height = el->pHeight->value;
 
 		if (el->type == "text")
 		{
@@ -97,22 +98,54 @@ void Renderer::renderDOM(cairo_t * cr, spElement _el)
 {
 	int i = 0;
 
+	if (_el->type == "document")
+	{
+		roundedRectangle(cr,
+			_el->position.x,
+			_el->position.y,
+			_el->width,
+			_el->height,
+			_el->pBackgroundColor,
+			0.0,
+			_el->pBorderSize->x(),
+			_el->pBorderColor
+		);
+	}
+
 	for each (spElement el in _el->children)
 	{
 		if (el->type != "text")
 		{
 			if (el->type == "input")
 			{
-				roundedRectangle(cr,
-					el->position.x,
-					el->position.y,
-					el->width,
-					el->height,
-					Color(255, 255, 255, 1.0),
-					0.0,
-					0.7,
-					Color(0, 0, 0, 1.0)
-				);
+				if(el->input == "text")
+					roundedRectangle(cr,
+						el->position.x,
+						el->position.y,
+						el->width,
+						el->height,
+						Color(255, 255, 255, 1.0),
+						0.0,
+						0.7,
+						Color(0, 0, 0, 1.0)
+					);
+				else if (el->input == "checkbox")
+				{
+					/*int SIZE = 10;
+					el->width = el->width > SIZE ? el->width : SIZE;
+					el->height = el->height > SIZE ? el->height : SIZE;*/
+
+					roundedRectangle(cr,
+						el->position.x,
+						el->position.y,
+						el->width,
+						el->height,
+						Color(0.9215686274509804, 0.9215686274509804, 0.9215686274509804, 1.0),
+						2.0,
+						0.1,
+						Color(0, 0, 0, 1.0)
+						);
+				}
 			}
 			else if (el->type == "button")
 			{
@@ -190,21 +223,28 @@ void Renderer::roundedGradiantRectangle(cairo_t * cr, double x, double y, double
 	cairo_arc(cr, x + radius, y + radius, radius, 180 * degrees, 270 * degrees);
 	cairo_close_path(cr);
 
-    cairo_surface_t* sur1 = cairo_surface_create_for_rectangle(CSurface::surface, x, y, width, height);
+    //cairo_surface_t* sur1 = cairo_surface_create_for_rectangle(CSurface::surface, x, y, width, height);
 
 	cairo_pattern_t *pat;
-	Debug::console << "x: " << x << ", y: " << y << ", h: " << height << ", w: " << width << endl;
-	//pat = cairo_pattern_create_linear( y+height/4.0, x, y+height/4.0, x+width);
-	pat = cairo_pattern_create_for_surface(sur1);
+	
+	pat = cairo_pattern_create_linear( y+height/4.0, x, y+height/4.0, x+width);
+	//pat = cairo_pattern_create_for_surface(sur1);
 
 	//cairo_patte
 
-	/*cairo_matrix_t matrix;
-	cairo_matrix_init_scale(&matrix, 100, 100);
-	cairo_matrix_init_translate(&matrix, 0.0, 0.0);
-	cairo_pattern_set_matrix(pat, &matrix);*/
+	double WinWidth = CSurface::WindowRect.right - CSurface::WindowRect.left;
+	double WinHeight = CSurface::WindowRect.bottom - CSurface::WindowRect.top;
 
-		//cairo_pattern_set_extend(pat, CAIRO_EXTEND_NONE);
+	double scaleH = (950*2) / height;
+
+	
+	cairo_matrix_t matrix;
+	cairo_get_matrix(cr, &matrix);
+	cairo_matrix_scale(&matrix, 1, scaleH);
+	cairo_matrix_translate(&matrix, 0, -y);
+	cairo_pattern_set_matrix(pat, &matrix);
+
+	cairo_pattern_set_extend(pat, /*CAIRO_EXTEND_PAD*/CAIRO_EXTEND_NONE);
 
 
 	cairo_pattern_add_color_stop_rgb(pat, 0, 0.9490196078431373, 0.9490196078431373, 0.9490196078431373);
@@ -212,17 +252,15 @@ void Renderer::roundedGradiantRectangle(cairo_t * cr, double x, double y, double
 	cairo_pattern_add_color_stop_rgb(pat, 0.5, 0.8666666666666667, 0.8666666666666667, 0.8666666666666667);
 	cairo_pattern_add_color_stop_rgb(pat, 1, 0.8117647058823529, 0.8117647058823529, 0.8117647058823529);
 
-	//cairo_set_source_rgba(cr, fill.r, fill.g, fill.b, fill.a);
 	cairo_set_source(cr, pat);
-
-	//cairo_fill(cr);
 	cairo_fill_preserve(cr);
-
 	cairo_pattern_destroy(pat);
 
 	cairo_set_source_rgba(cr, borderColor.r, borderColor.g, borderColor.b, borderColor.a);
 	cairo_set_line_width(cr, border);
 	cairo_stroke(cr);
+
+	Debug::console << "x: " << x << ", y: " << y << ", h: " << height << ", w: " << width << ", winHeight: " <<WinHeight << endl;
 }
 
 //0.8117647058823529
